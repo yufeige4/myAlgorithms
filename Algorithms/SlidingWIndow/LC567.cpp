@@ -2,64 +2,40 @@
 
 using namespace std;
 
-// 3. 无重复字符的最长子串
+// 567. 字符串的排列
 
-// 给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度。
+// 给你两个字符串 s1 和 s2 ，写一个函数来判断 s2 是否包含 s1 的排列。如果是，返回 true ；否则，返回 false 。
+
+// 换句话说，s1 的排列之一是 s2 的 子串 。
 
 class Solution {
 public:
-    // 暴力+hash map
-    int lengthOfLongestSubstring1(string s) {
-        int size = s.size();
-        if(size==0){
-            return 0;
-        }else if(size==1){
-            return 1;
+    bool checkInclusion(string s1, string s2) {
+        int sizeA = s1.size();
+        int sizeB = s2.size();
+        if(sizeA>sizeB){
+            return false;
+        }
+        int correct[26];
+        memset(correct,0,sizeof(correct));
+        for(int i=0;i<sizeA;++i){
+            --correct[s1[i]-'a'];
         }
         int i = 0;
-        int j = 0;
-        int temp;
-        int maxLen = 1;
-        unordered_map<char,int> hash;
-        while(i<size){
-            j = i;
-            while(j<size&&hash.find(s[j])==hash.end()){
-                hash[s[j]] = j;
-                ++j;
+        int ch_index;
+        // 滑动窗口，直到正确字符串的窗口大小正好符合要求
+        for(int j=0;j<sizeB;++j){
+            ch_index = s2[j] - 'a';
+            ++correct[ch_index];
+            while(correct[ch_index]>0){
+                --correct[s2[i]-'a'];
+                ++i;
             }
-            temp = j-i;
-            maxLen = maxLen<temp ? temp : maxLen;
-            if(j>=size){
-                break;
+            if(j-i+1==sizeA){
+                return true;
             }
-            i = hash[s[j]]+1;
-            hash.clear();
-        }
-        return maxLen;
-    }
 
-    // 滑动窗口+hash set
-    int lengthOfLongestSubstring2(string s) {
-        int size = s.size();
-        if(size==0){
-            return 0;
-        }else if(size==1){
-            return 1;
         }
-        int maxLen = 1;
-        int right = -1;
-        unordered_set<char> hashSet;
-
-        for(int left=0;left<size;++left){
-            if(left!=0){
-                hashSet.erase(s[left-1]);
-            }
-            while(right+1<size&&hashSet.find(s[right+1])==hashSet.end()){
-                hashSet.insert(s[right+1]);
-                ++right;
-            }
-            maxLen = right-left+1>maxLen ? right-left+1 : maxLen ;
-        }
-        return maxLen;
+        return false;
     }
 };
