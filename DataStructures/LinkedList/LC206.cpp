@@ -17,7 +17,7 @@ struct ListNode {
 class Solution {
 public:
     // 非递归
-    ListNode* reverseList(ListNode* head) {
+    ListNode* reverseList1(ListNode* head) {
         if(!head){
             return NULL;
         }
@@ -31,5 +31,14 @@ public:
             curr = next;
         }
         return pre;
+    }
+    // 递归
+    ListNode* reverseList2(ListNode* head) {
+        if(!head||!head->next) return head;
+        ListNode* newHead = reverseList2(head->next);
+        // smart power
+        head->next->next = head;
+        head->next = nullptr;
+        return newHead;
     }
 };
