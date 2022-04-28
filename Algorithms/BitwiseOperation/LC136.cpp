@@ -11,6 +11,7 @@ using namespace std;
 class Solution {
 public:
     // 利用xor的性质
+    // a^a = 0      a^0 = a
     int singleNumber(vector<int>& nums) {
         int result = 0;
         for(const auto& i:nums){
