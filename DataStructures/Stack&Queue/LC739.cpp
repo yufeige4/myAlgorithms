@@ -18,18 +18,13 @@ public:
         int size = temperatures.size();
         vector<int> result(size,0);
         for(int i=0;i<size;++i){
-            if(stk.empty()||temperatures[i]<=temperatures[stk.top()]){
-                // 栈为空或当前温度小于栈顶温度时进栈
-                stk.push(i);
-            }else{
-                // 将所有栈中比当前温度低的元素全部弹出
-                // 并更新结果
-                while(!stk.empty()&&temperatures[i]>temperatures[stk.top()]){
-                    result[stk.top()] = i-stk.top();
-                    stk.pop();
-                }
-                stk.push(i);
+            // 将所有栈中比当前温度低的元素全部弹出
+            // 并更新结果
+            while(!stk.empty()&&temperatures[i]>temperatures[stk.top()]){
+                result[stk.top()] = i-stk.top();
+                stk.pop();
             }
+            stk.push(i);
         }
         return result;
     }
