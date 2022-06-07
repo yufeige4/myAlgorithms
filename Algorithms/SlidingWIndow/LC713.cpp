@@ -21,6 +21,8 @@ public:
                 ++start;
             }
             // 区间[start,end]中的连续子数组都成立
+            // 多出end-start个和nums[end]结合的新连续子数组, 以及nums[end]数本身
+            // 共多end-start+1个
             result += end-start+1;
             ++end;
         }
