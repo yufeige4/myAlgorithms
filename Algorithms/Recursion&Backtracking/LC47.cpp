@@ -14,7 +14,7 @@ public:
             return;
         }
         for(int i=0;i<n;++i){
-            // 保证了重复值依次填入的顺序是从左到右
+            // 保证了重复值依次填入的顺序是从左到右这一种顺序
             if(visited[i] || (i>0 && nums[i]==nums[i-1] && !visited[i-1])){
                 continue;
             }

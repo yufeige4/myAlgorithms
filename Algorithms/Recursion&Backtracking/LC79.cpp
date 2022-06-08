@@ -14,21 +14,25 @@ public:
     int directY[4] = {1,0,-1,0};
 
     bool dfs(vector<vector<char>>& board,vector<vector<int>>& visited,string& word,int& k,int i,int& m,int& n,int x,int y){
+        // x,y坐标不合理 或 已访问过该格子 或 该格子不匹配
         if(x<0 || x>=m || y<0 || y>=n || visited[x][y]==1 || board[x][y]!=word[i]){
             return false;
         }
+        // 最后一位字符也匹配则整个字符串都匹配成功
         if(i+1==k){
             return true;
         }
         visited[x][y] = 1;
         bool result = false;
         int newX,newY;
+        // 对四个方向进行DFS
         for(int j=0;j<4;++j){
             newX = x + directX[j];
             newY = y + directY[j];
             result = result || dfs(board,visited,word,k,i+1,m,n,newX,newY);
         }
         visited[x][y] = 0;
+        // 搜索结果
         return result;
     }
     bool exist(vector<vector<char>>& board, string word) {
