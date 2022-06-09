@@ -22,7 +22,7 @@ public:
     //     }
     //     return count;
     // }
-    int numberOfArithmeticSlices(vector<int>& nums) {
+    int numberOfArithmeticSlices1(vector<int>& nums) {
         int size = nums.size();
         if(size<3){
             return 0;
@@ -37,12 +37,37 @@ public:
             while(end+1<size&&nums[end+1]-nums[end]==diff){
                 ++end;
             }
+            // 求和公式法
             if(end-start>=2){
                 count += (end-start)*(end-start-1)/2;
             }
             start = end;
         }
 
+        return count;
+    }
+    // 单项递增法
+    int numberOfArithmeticSlices2(vector<int>& nums) {
+        int size = nums.size();
+        if(size<3){
+            return 0;
+        }
+        int diff = nums[1]-nums[0];
+        int count = 0;
+        int temp = 0;
+        for(int i=2;i<size;++i){
+            if(nums[i]-nums[i-1]==diff){
+                // 每长一位则多出(新长度-2)个子数组
+                // 数组[1,2,3,4,...,n] [1,2,3,4,...,n,n+1]
+                // n+1位可以和前面[1,...,n-1]中任何一位为start结合形成新的子数组
+                // n-1个新数组
+                ++temp;
+                count += temp; 
+            }else{
+                diff = nums[i]-nums[i-1]; 
+                temp = 0;
+            }
+        }
         return count;
     }
 };
