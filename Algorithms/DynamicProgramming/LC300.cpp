@@ -14,6 +14,7 @@ public:
     // DP O(n^2)
     int lengthOfLIS1(vector<int>& nums) {
         int size = nums.size();
+        // 以该元素为结尾的序列最大长度
         vector<int> dp(size,1);
         for(int j=1;j<size;++j){
             for(int i=0;i<j;++i){

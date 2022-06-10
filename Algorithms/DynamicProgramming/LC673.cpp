@@ -23,10 +23,14 @@ public:
         for(int j=1;j<size;++j){
             for(int i=0;i<j;++i){
                 if(nums[j]>nums[i]){
+                    // 将该元素添加在以nums[i]为结尾的序列后面可以增加长度
+                    // 所以新长度的序列个数继承原长度
                     if(dp[i]+1>dp[j]){
                         dp[j] = dp[i] + 1;
                         count[j] = count[i];
                     }else if(dp[i]+1==dp[j]){
+                        // 将该元素添加在以nums[i]为结尾的序列后面则和另一个以该元素为结尾的序列长度相同
+                        // 则以该元素为结尾的最长序列个数叠加
                         count[j] += count[i];
                     }
                 }
