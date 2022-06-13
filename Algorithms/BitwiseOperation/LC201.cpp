@@ -8,7 +8,7 @@ using namespace std;
 
 class Solution {
 public:
-    int rangeBitwiseAnd(int left, int right) {
+    int rangeBitwiseAnd1(int left, int right) {
         int count = 0;
         // 抹去后面不同的位,只保留公共前缀
         while(right>left){
@@ -18,4 +18,15 @@ public:
         }
         return left<<count;
     }
+
+    int rangeBitwiseAnd2(int left, int right) {
+        // 使用 n&(n-1)操作抹去最右边的1
+        while(left<right){
+            right = right & (right-1);
+        }
+        return right;
+    }
+
+
+
 };
