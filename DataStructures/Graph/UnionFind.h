@@ -2,7 +2,6 @@
 
 using namespace std;
 
-
 class UnionFind{
 private:
     vector<int> parent;
@@ -28,5 +27,4 @@ public:
         // 将a的根的父亲设置为b的根
         parent[find(a)] = find(b);
     }
-
 };
