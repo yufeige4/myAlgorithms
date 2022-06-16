@@ -5,9 +5,11 @@ using namespace std;
 class UnionFind{
 private:
     vector<int> parent;
+    vector<int> sizes;
+    int disjoints;
 public:
     // 根据n个顶点构造graph
-    UnionFind(int n){
+    UnionFind(int n) : sizes(n,1),disjoints(n){
         parent.resize(n);
         // 将根据val值递增1赋值
         iota(parent.begin(),parent.end(),0);
@@ -25,6 +27,21 @@ public:
     void unite(int a,int b){
         // 将顶点a和b连通
         // 将a的根的父亲设置为b的根
-        parent[find(a)] = find(b);
+        int rootA = find(a);
+        int rootB = find(b);
+        if(rootA==rootB){
+            return;
+        }
+        // 统一合并规矩
+        // 大吞小
+        if(sizes[rootA]<sizes[rootB]){
+            swap(rootA,rootB);
+        }
+        parent[rootB] = rootA;
+        sizes[rootA] += sizes[rootB];
+        --disjoints;
+    }
+    int setsNum(){
+        return disjoints;
     }
 };
