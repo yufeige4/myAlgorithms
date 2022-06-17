@@ -24,13 +24,14 @@ public:
         // 直到找到原index的根为止
         return index;
     }
-    void unite(int a,int b){
+    // 返回是否为有效合并
+    bool unite(int a,int b){
         // 将顶点a和b连通
         // 将a的根的父亲设置为b的根
         int rootA = find(a);
         int rootB = find(b);
         if(rootA==rootB){
-            return;
+            return false;
         }
         // 统一合并规矩
         // 大吞小
@@ -40,6 +41,7 @@ public:
         parent[rootB] = rootA;
         sizes[rootA] += sizes[rootB];
         --disjoints;
+        return true;
     }
     int setsNum(){
         return disjoints;
