@@ -16,64 +16,70 @@ using namespace std;
 // 请按照以下步骤调用MyCalendar 类: MyCalendar cal = new MyCalendar(); MyCalendar.book(start, end)
 
 // 暴力
-class MyCalendarTwo {
-    typedef pair<int,int> interval;
-private:
-    vector<interval> onceIntervals;
-    vector<interval> twiceIntervals;
-public:
-    MyCalendarTwo() {
-
-    }
-    
-    bool book(int start, int end) {
-        for(auto& time : twiceIntervals){
-            // 若和重叠区间重合
-            if(start<time.second&&end>time.first){
-                return false;
-            }
-        }
-        for(auto& time : onceIntervals){
-            // 若和正常区间重合
-            if(start<time.second&&end>time.first){
-                twiceIntervals.push_back(make_pair(max(time.first,start),min(time.second,end)));
-            }
-        }
-        onceIntervals.push_back(make_pair(start,end));
-        return true;
-    }
-};
-
-// 线段树
 // class MyCalendarTwo {
+//     typedef pair<int,int> interval;
+// private:
+//     vector<interval> onceIntervals;
+//     vector<interval> twiceIntervals;
 // public:
 //     MyCalendarTwo() {
 
 //     }
-
-//     void update(int start, int end, int val, int l, int r, int idx) {
-//         if (r < start || end < l) {
-//             return;
-//         } 
-//         if (start <= l && r <= end) {
-//             tree[idx].first += val;
-//             tree[idx].second += val;
-//         } else {
-//             int mid = (l + r) >> 1;
-//             update(start, end, val, l, mid, 2 * idx);
-//             update(start, end, val, mid + 1, r, 2 * idx + 1);
-//             tree[idx].first = tree[idx].second + max(tree[2 * idx].first, tree[2 * idx + 1].first);
+    
+//     bool book(int start, int end) {
+//         for(auto& time : twiceIntervals){
+//             // 若和重叠区间重合
+//             if(start<time.second&&end>time.first){
+//                 return false;
+//             }
 //         }
-//     }
-
-//     bool book(int start, int end) {            
-//         update(start, end - 1, 1, 0, 1e9, 1);
-//         if (tree[1].first > 2) {
-//             update(start, end - 1, -1, 0, 1e9, 1);
-//             return false;
+//         for(auto& time : onceIntervals){
+//             // 若和正常区间重合
+//             if(start<time.second&&end>time.first){
+//                 twiceIntervals.push_back(make_pair(max(time.first,start),min(time.second,end)));
+//             }
 //         }
+//         onceIntervals.push_back(make_pair(start,end));
 //         return true;
 //     }
-// private:
-//     unordered_map<int, pair<int, int>> tree;
 // };
+
+// 线段树
+class MyCalendarTwo {
+public:
+    MyCalendarTwo() {
+
+    }
+
+    void update(int start,int end,int l,int r,int idx,int val) {
+        if (r<start || end<l){
+            // 未重合
+            return;
+        } 
+        if (start<=l && r<=end){
+            // 预定区间内包含[l,r]
+            tree[idx].first += val;
+            tree[idx].second += val;
+        } else {
+            // [l,r]区间内包含预定区间
+            int mid = (l + r)/2;
+            update(start, end, l, mid, 2 * idx, val);
+            update(start, end, mid + 1, r, 2 * idx + 1, val);
+            // 当前区间已更新最大值 为 左右子区间已更新最大值+当前结点更新值
+            tree[idx].first = tree[idx].second + max(tree[2 * idx].first, tree[2 * idx + 1].first);
+        }
+    }
+
+    bool book(int start, int end) {            
+        update(start, end - 1, 0, 1e9, 1, 1);
+        if (tree[1].first > 2) {
+            update(start, end - 1, 0, 1e9, 1, -1);
+            return false;
+        }
+        return true;
+    }
+private:
+    // 动态线段树，懒标记lazy 标记区间 [l,r] 进行累加的次数, tree 记录区间 [l,r] 的最大值，每次动态更新线段树
+    unordered_map<int, pair<int, int>> tree;
+    // tree[i].first 为区间已更新最大值 tree[i].second 为懒标记(当前结点更新值)
+};
